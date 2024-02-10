@@ -5,17 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
-public class VideoGameCopy {
+public class GameConsoleCopy {
+    // L'identifiant de la copie dans la base de données
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id; // L'identifiant de la copie
-    // Une copie correspond à un seul jeu
+    Long id;
+    // Le numéro de série
+    String serialNumber;
+    // Une copie correspond à une seule console
     @ManyToOne
-    VideoGame videoGame; // Le jeu correspondant
-    // Une copie est dans un seul prêt à la fois
-    @ManyToOne
-    Rent rent;
+    GameConsole gameConsole;
 }

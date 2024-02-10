@@ -15,8 +15,11 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Id
     private Long Id;
+    @Column(nullable = false)
     String adminName;
+    @Column(nullable = false)
     String adminCode;
+    @Column(nullable = false)
     String adminPassword;
     LocalDate customerDateOfBirth;
     @Enumerated

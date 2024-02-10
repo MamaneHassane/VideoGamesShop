@@ -19,7 +19,6 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
     public void addCustomer(Customer customer) {
-        customer.setCustomerCode(UUID.randomUUID().toString());
         customerRepository.save(customer);
     }
 
@@ -30,9 +29,8 @@ public class CustomerService {
     public Customer updateCustomerById(Customer updatedCustomer, Long id) {
         return customerRepository.findById(id).map(
                 (customer) -> {
-                    customer.setCustomerFirstName(updatedCustomer.getCustomerFirstName());
-                    customer.setCustomerLastName(updatedCustomer.getCustomerLastName());
-                    customer.setCustomerDateOfBirth(updatedCustomer.getCustomerDateOfBirth());
+                    customer.setFirstName(updatedCustomer.getFirstName());
+                    customer.setLastName(updatedCustomer.getLastName());
                     return  customerRepository.save(customer);
                 }).orElseThrow(()-> new CustomerNotFoundException(id));
     }

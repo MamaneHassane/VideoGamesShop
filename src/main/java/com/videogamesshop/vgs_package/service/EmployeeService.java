@@ -32,7 +32,6 @@ public class EmployeeService {
                 employee -> {
                     employee.setFirstName(updatedEmployee.getFirstName());
                     employee.setLastName(updatedEmployee.getLastName());
-                    employee.setShopCode(updatedEmployee.getShopCode());
                     return employeeRepository.save(employee);
                 }
         ).orElseThrow(()-> new EmployeeNotFoundException(Id));

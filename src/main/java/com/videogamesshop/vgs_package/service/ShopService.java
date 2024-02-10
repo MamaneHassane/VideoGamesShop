@@ -28,8 +28,7 @@ public class ShopService {
     public Shop updateShopById(Shop updatedShop, Long Id){
         return shopRepository.findById(Id).map(
                 shop->{
-                    shop.setManagerId(updatedShop.getManagerId());
-                    shop.setShopLocationName(updatedShop.getShopLocationName());
+
                     return shopRepository.save(shop);
                 }
         ).orElseThrow(()->new ShopNotFoundException(Id));

@@ -27,8 +27,7 @@ public class VideoGameCopyService {
     public VideoGameCopy updateVideoGameCopyById(VideoGameCopy updatedVideoGameCopy, Long Id){
         return videoGameCopyRepository.findById(Id).map(
                 videoGameCopy -> {
-                    videoGameCopy.setGameName(updatedVideoGameCopy.getGameName());
-                    videoGameCopy.setConsoleName((updatedVideoGameCopy.getConsoleName()));
+
                     return videoGameCopyRepository.save(videoGameCopy);
                 }
         ).orElseThrow(()->new VideoGameCopyNotFoundException(Id));
