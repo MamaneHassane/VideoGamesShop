@@ -4,6 +4,7 @@ import com.videogamesshop.vgs_package.exceptions.VideoGameNotFoundException;
 import com.videogamesshop.vgs_package.model.entities.VideoGame;
 import com.videogamesshop.vgs_package.model.entities.VideoGameCopy;
 import com.videogamesshop.vgs_package.model.records.CreateVideoGameRecord;
+import com.videogamesshop.vgs_package.repository.VideoGameCopyRepository;
 import com.videogamesshop.vgs_package.repository.VideoGameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.videogamesshop.vgs_package.utilities.ImageUtils.compressImage;
 
@@ -20,11 +22,13 @@ import static com.videogamesshop.vgs_package.utilities.ImageUtils.compressImage;
 @Transactional
 public class VideoGameService {
     private final VideoGameRepository videoGameRepository;
+    VideoGameCopyRepository videoGameCopyRepository;
     GameConsoleService gameConsoleService;
     @Autowired
-    public VideoGameService(VideoGameRepository videoGameRepository, GameConsoleService gameConsoleService){
+    public VideoGameService(VideoGameRepository videoGameRepository, GameConsoleService gameConsoleService,VideoGameCopyRepository videoGameCopyRepository){
         this.videoGameRepository = videoGameRepository;
         this.gameConsoleService = gameConsoleService;
+        this.videoGameCopyRepository = videoGameCopyRepository;
     }
     public VideoGame addVideoGame(VideoGame videoGame){
         return videoGameRepository.save(videoGame);
@@ -42,7 +46,18 @@ public class VideoGameService {
                 .build();
         return videoGameRepository.save(videoGame);
     }
-    public
+
+    public static Optional<VideoGame> addCopyToGame(VideoGameCopy videoGameCopy, VideoGameRepository videoGameRepository) {
+        Optional<VideoGame> theVideoGame = videoGameRepository.findById(videoGameCopy.getVideoGame().getId());
+        theVideoGame.ifPresent(videoGame -> {
+            List<VideoGameCopy> videoGameCopies = videoGame.getCopies();
+            videoGameCopies.add(videoGameCopy);
+            videoGame.setCopies(videoGameCopies);
+            videoGameRepository.save(videoGame);
+        });
+        return theVideoGame;
+    }
+
     public List<VideoGame> findAllVideoGame(){
         return videoGameRepository.findAll();
     }

@@ -73,13 +73,7 @@ public class RentService {
                 var copiesInRent = rent.getVideoGameCopies();
                 copiesInRent.remove(videoGameCopy);
                 videoGameCopy.setStatus(VideoGameCopyStatus.INSTORE);
-                Optional<VideoGame> theVideoGame = videoGameRepository.findById(videoGameCopy.getVideoGame().getId());
-                theVideoGame.ifPresent(videoGame -> {
-                    List<VideoGameCopy> copies = videoGame.getCopies();
-                    copies.add(videoGameCopy);
-                    videoGame.setCopies(copies);
-                    videoGameRepository.save(videoGame);
-                });
+                VideoGameService.addCopyToGame(videoGameCopy, videoGameRepository);
                 rent.setVideoGameCopies(copiesInRent);
                 return rentRepository.save(rent);
             });
