@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface VideoGameCopyRepository extends JpaRepository<VideoGameCopy,Long> {
     Optional<VideoGameCopy> findVideoGameCopyById(Long Id);
+    Optional<VideoGameCopy> findVideoGameCopyByVideoGame_GameName(String gameName);
 }

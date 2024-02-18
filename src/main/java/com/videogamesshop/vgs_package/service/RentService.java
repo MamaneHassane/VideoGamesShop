@@ -47,7 +47,7 @@ public class RentService {
         return rentRepository.save(rent);
     }
 
-    public synchronized void addGameToRent(Long rentId, Long videoGameId) {
+    public synchronized void addGameToRent(Long rentId, Long videoGameId, Long gameConsoleId) {
         Optional<VideoGame> theVideoGame = videoGameRepository.findById(videoGameId);
         theVideoGame.ifPresent(videoGame -> {
             List<VideoGameCopy> copies = videoGame.getCopies();

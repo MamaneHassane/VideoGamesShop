@@ -1,13 +1,14 @@
 package com.videogamesshop.vgs_package.service;
 
 import com.videogamesshop.vgs_package.exceptions.VideoGameCopyNotFoundException;
+import com.videogamesshop.vgs_package.model.entities.GameConsole;
 import com.videogamesshop.vgs_package.model.entities.VideoGameCopy;
 import com.videogamesshop.vgs_package.repository.VideoGameCopyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -21,6 +22,7 @@ public class VideoGameCopyService {
     public List<VideoGameCopy> findAllVideoGameCopy(){
         return videoGameCopyRepository.findAll();
     }
+
     public VideoGameCopy findVideoGameCopyById(Long Id){
         return videoGameCopyRepository.findById(Id).orElseThrow(()->new VideoGameCopyNotFoundException(Id));
     }
@@ -32,7 +34,6 @@ public class VideoGameCopyService {
                 }
         ).orElseThrow(()->new VideoGameCopyNotFoundException(Id));
     }
-
     public void deleteVideoGameCopyById(Long Id){
         videoGameCopyRepository.deleteById(Id);
     }
