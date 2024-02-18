@@ -1,4 +1,4 @@
-package com.videogamesshop.vgs_package.model;
+package com.videogamesshop.vgs_package.model.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

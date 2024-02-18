@@ -1,7 +1,7 @@
 package com.videogamesshop.vgs_package.service;
 
 import com.videogamesshop.vgs_package.exceptions.EmployeeNotFoundException;
-import com.videogamesshop.vgs_package.model.Employee;
+import com.videogamesshop.vgs_package.model.entities.Employee;
 import com.videogamesshop.vgs_package.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class EmployeeService {
     }
 
     public Employee findEmployeeById(Long Id){
-        return employeeRepository.findEmployeeById(Id)
+        return employeeRepository.findById(Id)
                 .orElseThrow(()->new EmployeeNotFoundException(Id));
     }
 
@@ -38,7 +38,7 @@ public class EmployeeService {
     }
 
     public void deleteEmployeeById(Long Id){
-        employeeRepository.deleteEmployeeById(Id);
+        employeeRepository.deleteById(Id);
     }
 
 }

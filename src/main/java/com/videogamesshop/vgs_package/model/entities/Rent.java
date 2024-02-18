@@ -1,13 +1,14 @@
-package com.videogamesshop.vgs_package.model;
+package com.videogamesshop.vgs_package.model.entities;
 
+import com.videogamesshop.vgs_package.model.Enums.RentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
@@ -21,14 +22,21 @@ public class Rent {
     Customer customer;
     // Un prêt à une date de début
     LocalDate startDate;
-
+    // Un prêt à une date de fin
+    LocalDate endDate;
+    // Un prêt à une date de remise
+    LocalDate returnDate;
+    // Un prêt à un coût
+    double cost;
     // Un prêt est effectué par un seul agent
     @ManyToOne
     Employee employee;
     // Un prêt est effectuée dans un shop
     @ManyToOne
     Shop shop;
+    // Un rent possède un statut : En cours ou remis
+    RentStatus status;
     // Un prêt contient une liste de copies de jeux
-    @OneToMany(mappedBy = "rent")
-    List<VideoGameCopy> videoGameCopies = new ArrayList<>();
+    @ManyToMany(mappedBy = "rents")
+    Set<VideoGameCopy> videoGameCopies = new HashSet<>();
 }

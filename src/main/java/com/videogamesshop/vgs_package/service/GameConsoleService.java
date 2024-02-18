@@ -1,7 +1,7 @@
 package com.videogamesshop.vgs_package.service;
 
 import com.videogamesshop.vgs_package.exceptions.GameConsoleNotFoundException;
-import com.videogamesshop.vgs_package.model.GameConsole;
+import com.videogamesshop.vgs_package.model.entities.GameConsole;
 import com.videogamesshop.vgs_package.repository.GameConsoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class GameConsoleService {
         return gameConsoleRepository.findAll();
     }
     public GameConsole findGameConsoleById(Long Id){
-        return gameConsoleRepository.findGameConsoleById(Id)
+        return gameConsoleRepository.findById(Id)
                 .orElseThrow(()-> new GameConsoleNotFoundException(Id));
     }
     public GameConsole updateGameConsoleById(GameConsole updatedGameConsole, Long Id){
@@ -36,6 +36,6 @@ public class GameConsoleService {
         ).orElseThrow(()->new GameConsoleNotFoundException(Id));
     }
     public void deleteGameConsoleById(Long Id){
-        gameConsoleRepository.deleteGameConsoleById(Id);
+        gameConsoleRepository.deleteById( Id);
     }
 }

@@ -1,11 +1,8 @@
 package com.videogamesshop.vgs_package.repository;
 
-import com.videogamesshop.vgs_package.model.Employee;
+import com.videogamesshop.vgs_package.model.entities.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
 public interface EmployeeRepository extends JpaRepository<Employee,Long> {
-    Optional<Employee> findEmployeeById(Long id);
-    void deleteEmployeeById(Long Id);
+
 }

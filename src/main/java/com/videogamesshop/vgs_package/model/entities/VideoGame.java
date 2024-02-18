@@ -1,4 +1,4 @@
-package com.videogamesshop.vgs_package.model;
+package com.videogamesshop.vgs_package.model.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
@@ -28,4 +30,7 @@ public class VideoGame {
     // qui ne sont pas chargées quand on charge le jeu
     @OneToMany(mappedBy = "videoGame", fetch = FetchType.LAZY)
     List<VideoGameCopy> copies = new ArrayList<>(); // La liste des copies
+    // Un jeu se trouve sur plusieurs consoles
+    @ManyToMany(mappedBy = "videoGames")
+    Set<GameConsole> gameConsoles = new HashSet<>();
 }

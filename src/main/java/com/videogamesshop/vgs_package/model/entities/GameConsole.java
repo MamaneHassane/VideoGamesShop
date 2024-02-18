@@ -1,4 +1,4 @@
-package com.videogamesshop.vgs_package.model;
+package com.videogamesshop.vgs_package.model.entities;
 
 import com.videogamesshop.vgs_package.model.Enums.ConsoleName;
 import jakarta.persistence.*;
@@ -7,7 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
@@ -23,7 +24,14 @@ public class GameConsole {
     int year;
     // La description de la console
     String description;
-    // Une game console possède plusieurs copies
-    @OneToMany(mappedBy = "gameConsole")
-    List<GameConsoleCopy> copies = new ArrayList<>();
+    // L'image de la console
+    byte[] consoleImage;
+    // Une console à plusieurs jeux
+    @ManyToMany
+    @JoinTable(
+            name = "console_game",
+            joinColumns = @JoinColumn(name = "console_id" , referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id", referencedColumnName = "id")
+    )
+    Set<VideoGame> videoGames = new HashSet<>();
 }

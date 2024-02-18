@@ -1,7 +1,7 @@
 package com.videogamesshop.vgs_package.service;
 
 import com.videogamesshop.vgs_package.exceptions.AdminNotFoundException;
-import com.videogamesshop.vgs_package.model.Admin;
+import com.videogamesshop.vgs_package.model.entities.Admin;
 import com.videogamesshop.vgs_package.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class AdminService {
     }
 
     public Admin findAdminById(Long Id){
-        return adminRepository.findAdminById(Id)
+        return adminRepository.findById(Id)
                 .orElseThrow(()->new AdminNotFoundException(Id));
     }
 
@@ -41,8 +41,8 @@ public class AdminService {
         ).orElseThrow(()->new AdminNotFoundException(Id));
     }
 
-    public void deleteAdminById(Long Id){
-        adminRepository.deleteAdminById(Id);
+    public void deleteAdminById(Long id){
+        adminRepository.deleteById(id);
     }
 }
 

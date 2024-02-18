@@ -1,4 +1,4 @@
-package com.videogamesshop.vgs_package.model;
+package com.videogamesshop.vgs_package.model.entities;
 
 import com.videogamesshop.vgs_package.model.Enums.Role;
 import jakarta.persistence.*;

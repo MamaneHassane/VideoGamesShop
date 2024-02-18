@@ -1,6 +1,5 @@
-package com.videogamesshop.vgs_package.model;
+package com.videogamesshop.vgs_package.model.entities;
 
-import com.videogamesshop.vgs_package.model.Enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +21,12 @@ public class Customer implements Serializable {
     String firstName;
     // Le nom du client
     String lastName;
+    // L'email du client
+    String email;
+    // L'username
+    String userName;
+    // Le mot de passe
+    String password;
     // La date de naissance
     LocalDate dateOfBirth;
     // Un client à un montant dans son compte

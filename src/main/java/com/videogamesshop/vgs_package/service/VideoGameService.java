@@ -1,7 +1,7 @@
 package com.videogamesshop.vgs_package.service;
 
 import com.videogamesshop.vgs_package.exceptions.VideoGameNotFoundException;
-import com.videogamesshop.vgs_package.model.VideoGame;
+import com.videogamesshop.vgs_package.model.entities.VideoGame;
 import com.videogamesshop.vgs_package.repository.VideoGameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class VideoGameService {
         return videoGameRepository.findAll();
     }
     public VideoGame findVideoGameById(Long Id){
-        return videoGameRepository.findVideoGameById(Id).orElseThrow(()-> new VideoGameNotFoundException(Id));
+        return videoGameRepository.findById(Id).orElseThrow(()-> new VideoGameNotFoundException(Id));
     }
     public VideoGame updateVideoGameById(VideoGame updatedVideoGame, Long Id){
         return videoGameRepository.findById(Id).map(
@@ -35,6 +35,6 @@ public class VideoGameService {
         ).orElseThrow(()-> new VideoGameNotFoundException(Id));
     }
     public void deleteVideoGameById(Long Id){
-        videoGameRepository.deleteVideoGameById(Id);
+        videoGameRepository.deleteById(Id);
     }
 }

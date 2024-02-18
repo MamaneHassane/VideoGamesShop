@@ -1,6 +1,6 @@
-package com.videogamesshop.vgs_package.controller;
+package com.videogamesshop.vgs_package.controllers;
 
-import com.videogamesshop.vgs_package.model.VideoGameCopy;
+import com.videogamesshop.vgs_package.model.entities.VideoGameCopy;
 import com.videogamesshop.vgs_package.service.VideoGameCopyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

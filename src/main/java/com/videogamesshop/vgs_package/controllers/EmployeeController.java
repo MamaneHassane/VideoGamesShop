@@ -1,6 +1,6 @@
-package com.videogamesshop.vgs_package.controller;
+package com.videogamesshop.vgs_package.controllers;
 
-import com.videogamesshop.vgs_package.model.Employee;
+import com.videogamesshop.vgs_package.model.entities.Employee;
 import com.videogamesshop.vgs_package.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
