@@ -1,4 +1,4 @@
-package com.videogamesshop.vgs_package.security;
+package com.videogamesshop.vgs_package.security.configurations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.*;
