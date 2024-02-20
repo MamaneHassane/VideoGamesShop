@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
-public class User {
+public class UserInfo {
     // L'identifiant du client dans la base de données
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,9 +24,11 @@ public class User {
     // L'email
     String email;
     // L'username
-    String userName;
+    String name;
     // Le mot de passe
     String password;
     // La date de naissance
     LocalDate dateOfBirth;
+    // Les roles
+    private String roles;
 }
