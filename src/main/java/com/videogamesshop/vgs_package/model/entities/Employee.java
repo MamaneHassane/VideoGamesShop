@@ -15,9 +15,6 @@ import java.util.List;
 public class Employee extends UserInfo {
     @OneToMany(mappedBy = "employee")
     List<RoleInCareer> rolesOccupied;
-    // Un employé travaille dans un seul shop
-    @ManyToOne
-    Shop shop;
     // Un employé effectue plusieurs prêts
     // qui ne sont pas chargés quand l'employé est chargé
     @OneToMany(mappedBy = "employee")

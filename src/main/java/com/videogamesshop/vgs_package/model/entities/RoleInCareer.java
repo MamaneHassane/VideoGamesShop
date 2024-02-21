@@ -15,7 +15,7 @@ public class RoleInCareer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
-    // Le role
+    // Le role en tant qu'employé
     Role role;
     // Le salaire
     double salary;
@@ -28,5 +28,5 @@ public class RoleInCareer {
     // La date de début de poste
     LocalDate since;
     // La date de fin de poste
-    LocalDate to;
+    LocalDate until;
 }

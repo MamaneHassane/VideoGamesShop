@@ -1,6 +1,7 @@
 package com.videogamesshop.vgs_package.security.services;
 
 import com.videogamesshop.vgs_package.security.entities.UserInfo;
+import com.videogamesshop.vgs_package.security.details.UserInfoDetails;
 import com.videogamesshop.vgs_package.security.repositories.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,10 @@ public class UserInfoService implements UserDetailsService {
         // Converting userDetail to UserDetails
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
+    }
+    public boolean alreadyExist(String username){
+        Optional<UserInfo> userDetail = repository.findByName(username);
+        return userDetail.isPresent();
     }
 
     public String addUser(UserInfo userInfo) {

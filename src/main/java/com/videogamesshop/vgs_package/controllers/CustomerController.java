@@ -2,6 +2,7 @@ package com.videogamesshop.vgs_package.controllers;
 
 import com.videogamesshop.vgs_package.model.entities.Customer;
 import com.videogamesshop.vgs_package.model.records.AuthenticateCustomerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,9 @@ import java.util.List;
 @RequestMapping("/customers")
 public class CustomerController {
     private final CustomerService customerService;
+    @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-    }
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticateCustomer(@RequestBody AuthenticateCustomerRecord customer){
-        Customer customerFound = customerService.findByUserNameAndPassword(customer.userName(),customer.password());
-        return new ResponseEntity<>(customerFound,HttpStatus.OK);
     }
     @GetMapping("/findAll")
     public ResponseEntity<List<Customer>> getAllCustomer(){

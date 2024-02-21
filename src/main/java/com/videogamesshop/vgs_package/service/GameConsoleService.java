@@ -48,6 +48,6 @@ public class GameConsoleService {
         ).orElseThrow(()->new GameConsoleNotFoundException(Id));
     }
     public void deleteGameConsoleById(Long Id){
-        gameConsoleRepository.deleteById( Id);
+        gameConsoleRepository.deleteById(Id);
     }
 }
