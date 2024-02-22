@@ -3,6 +3,7 @@ package com.videogamesshop.vgs_package.model.entities;
 import com.videogamesshop.vgs_package.model.Enums.VideoGameCopyStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
+@Builder
 public class VideoGameCopy {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

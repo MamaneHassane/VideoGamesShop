@@ -4,9 +4,10 @@ import com.videogamesshop.vgs_package.exceptions.RentNotFoundException;
 import com.videogamesshop.vgs_package.model.Enums.RentStatus;
 import com.videogamesshop.vgs_package.model.Enums.VideoGameCopyStatus;
 import com.videogamesshop.vgs_package.model.entities.*;
+import com.videogamesshop.vgs_package.model.records.AddGameToRentRecord;
 import com.videogamesshop.vgs_package.model.records.CreateRentRecord;
 import com.videogamesshop.vgs_package.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-
+@AllArgsConstructor
 public class RentService {
     RentRepository rentRepository;
     VideoGameCopyRepository videoGameCopyRepository;
@@ -26,16 +27,13 @@ public class RentService {
     VideoGameRepository videoGameRepository;
     CustomerService customerService;
     VideoGameService videoGameService;
-    @Autowired
-    public RentService(RentRepository rentRepository){
-        this.rentRepository = rentRepository;
-    }
 
     public Rent createRent(CreateRentRecord createRentRecord){
         Rent rent = new Rent();
         Optional<Customer> theCustomer = customerRepository.findById(createRentRecord.customerId());
         theCustomer.ifPresent(customer -> {
-            customerService.decreaseBalance(createRentRecord.customerId(),createRentRecord.numberOfDays()*((double) 1 /7));
+            customerService.decreaseBalance(createRentRecord.customerId(),createRentRecord.numberOfDays()*((double) 1 /7 * 0 )); // 1 Dollar par semaine par jeu, quel que soit le jeu, 0 jeu au début
+            rent.setCustomer(customer);
         });
         Optional<Shop> theShop = shopRepository.findById(createRentRecord.shopId());
         theShop.ifPresent(rent::setShop);
@@ -43,12 +41,13 @@ public class RentService {
         theEmployee.ifPresent(rent::setEmployee);
         rent.setEndDate(LocalDate.now().plusDays(createRentRecord.numberOfDays()));
         rent.setStartDate(LocalDate.now());
-        rent.setCost(createRentRecord.numberOfDays()*((double) 1 /7)); // 1 Dollar par semaine par jeu, quel que soit le jeu
+        rent.setStatus(RentStatus.ONGOING);
+        rent.setCost(createRentRecord.numberOfDays()*((double) 1 /7) * 0); // 1 Dollar par semaine par jeu, quel que soit le jeu, 0 jeu au début
         return rentRepository.save(rent);
     }
 
-    public synchronized void addGameToRent(Long rentId, Long videoGameId, Long gameConsoleId) {
-        Optional<VideoGame> theVideoGame = videoGameRepository.findById(videoGameId);
+    public synchronized Rent addGameToRent(AddGameToRentRecord addGameToRentRecord) {
+        Optional<VideoGame> theVideoGame = videoGameRepository.findById(addGameToRentRecord.videoGameId());
         theVideoGame.ifPresent(videoGame -> {
             List<VideoGameCopy> copies = videoGame.getCopies();
             if(!copies.isEmpty()){
@@ -57,7 +56,7 @@ public class RentService {
                 videoGameCopy.setStatus(VideoGameCopyStatus.RENTED); // Ensuite là manipuler
                 videoGame.setCopies(copies);
                 videoGameRepository.save(videoGame);
-                rentRepository.findById(rentId).map((rent) -> {
+                rentRepository.findById(addGameToRentRecord.rentId()).map((rent) -> {
                     var copiesInRent = rent.getVideoGameCopies();
                     copiesInRent.add(videoGameCopy);
                     rent.setVideoGameCopies(copiesInRent);
@@ -65,6 +64,7 @@ public class RentService {
                 });
             }
         });
+        return null;
     }
     public synchronized void deleteGameFromRent(Long rentId, Long videoGameCopyId) {
         Optional<VideoGameCopy> theVideoGameCopy = videoGameCopyRepository.findById(videoGameCopyId);
@@ -73,7 +73,7 @@ public class RentService {
                 var copiesInRent = rent.getVideoGameCopies();
                 copiesInRent.remove(videoGameCopy);
                 videoGameCopy.setStatus(VideoGameCopyStatus.INSTORE);
-                VideoGameService.addCopyToGame(videoGameCopy, videoGameRepository);
+                videoGameService.addExistingCopyToGame(videoGameCopy, videoGameRepository);
                 rent.setVideoGameCopies(copiesInRent);
                 return rentRepository.save(rent);
             });

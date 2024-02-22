@@ -1,5 +1,6 @@
 package com.videogamesshop.vgs_package.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.videogamesshop.vgs_package.security.entities.UserInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties({"rentsDone"})
 public class Customer extends UserInfo implements Serializable {
     // Un client à un montant dans son compte
     double moneyBalance;

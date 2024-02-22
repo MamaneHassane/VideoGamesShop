@@ -1,5 +1,6 @@
 package com.videogamesshop.vgs_package.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.videogamesshop.vgs_package.model.Enums.RentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

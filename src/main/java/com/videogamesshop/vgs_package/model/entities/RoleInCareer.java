@@ -1,5 +1,6 @@
 package com.videogamesshop.vgs_package.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.videogamesshop.vgs_package.model.Enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,9 +22,11 @@ public class RoleInCareer {
     double salary;
     // L'employé concerné
     @ManyToOne
+    @JsonBackReference("role_employee")
     Employee employee;
     // Le shop
     @ManyToOne
+    @JsonBackReference("role_shop")
     Shop shop;
     // La date de début de poste
     LocalDate since;

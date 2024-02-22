@@ -30,7 +30,6 @@ public class ShopService {
                 shop->{
                     shop.setShopName(updatedShop.getShopName());
                     shop.setRentsOfShop(updatedShop.getRentsOfShop());
-                    shop.setManager(updatedShop.getManager());
                     shop.setEmployeesWhoWorkedHere(updatedShop.getEmployeesWhoWorkedHere());
                     return shopRepository.save(shop);
                 }
