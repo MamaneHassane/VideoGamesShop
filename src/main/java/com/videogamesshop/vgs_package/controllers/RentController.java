@@ -35,4 +35,10 @@ public class RentController {
         if(rentDone != null) return new ResponseEntity<Rent>(rentDone, HttpStatus.CREATED);
         return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.EXPECTATION_FAILED);
     }
+    @PreAuthorize("hasAnyAuthority({'EMPLOYEE,ADMIN,MODERATOR'})")
+    @PostMapping("/removegamefromrent/{rentId}/{gameId}")
+    public ResponseEntity<?> deleteGameFromRent(@PathVariable("rentId") long rentId, @PathVariable("gameId") long gameId){
+        rentService.deleteGameFromRent(rentId,gameId);
+        return new ResponseEntity<>("Jeu supprimé du prêt",HttpStatus.OK);
+    }
 }

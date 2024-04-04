@@ -13,44 +13,39 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/videogames")
+@PreAuthorize("hasAnyAuthority({'ADMIN,MODERATOR'})")
 public class VideoGameController {
     private final VideoGameService videoGameService;
     public VideoGameController(VideoGameService videoGameService) {
         this.videoGameService = videoGameService;
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,MODERATOR'})")
     @GetMapping("/findAll")
     public ResponseEntity<List<VideoGame>> getAllVideoGames(){
         List<VideoGame> videoGames= videoGameService.findAllVideoGame();
         return new ResponseEntity<>(videoGames, HttpStatus.OK);
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,MODERATOR'})")
     @PostMapping("/addCopy/{videoGameId}")
     public ResponseEntity<?> addNewCopyToGame(@PathVariable("videoGameId") Long videoGameId){
         if(videoGameService.addNewCopyToGame(videoGameId).get())
             return new ResponseEntity<>("Copie ajouté avec succès",HttpStatus.ACCEPTED);
         return new ResponseEntity<>("Erreur lors de l'ajout de la copie",HttpStatus.EXPECTATION_FAILED);
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,MODERATOR'})")
     @GetMapping("/findOne/{id}")
     public ResponseEntity<VideoGame> getVideoGameById(@PathVariable Long id){
         VideoGame videoGame = videoGameService.findVideoGameById(id);
         return new ResponseEntity<>(videoGame,HttpStatus.OK);
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,MODERATOR'})")
     @PostMapping("/createOne")
     public ResponseEntity<VideoGame> createVideoGame(@RequestPart("videogame") String createVideoGameString,
                                                      @RequestPart("videogameimage")MultipartFile videoGameImage) throws Exception {
         VideoGame videoGame = videoGameService.addVideoGame(createVideoGameString,videoGameImage);
         return new ResponseEntity<>(videoGame,HttpStatus.CREATED);
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,MODERATOR'})")
     @PutMapping("/updateOne/{id}")
     public ResponseEntity<VideoGame> updateVideoGameById(@RequestBody UpdateVideoGameRecord updatedVideoGameRecord, @PathVariable("id") Long id){
         VideoGame videoGame = videoGameService.updateVideoGameById(updatedVideoGameRecord,id);
         return new ResponseEntity<>(videoGame,HttpStatus.ACCEPTED);
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,MODERATOR'})")
     @DeleteMapping("/deleteOne/{id}")
     public ResponseEntity<VideoGame> deleteVideoGameById(@PathVariable("id") Long id){
         videoGameService.deleteVideoGameById(id);

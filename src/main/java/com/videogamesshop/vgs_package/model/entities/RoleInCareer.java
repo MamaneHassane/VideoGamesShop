@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.videogamesshop.vgs_package.model.Enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data @AllArgsConstructor @NoArgsConstructor
+@Builder
 @Entity
 public class RoleInCareer {
     // L'identifiant de la période de carrière dans la base de données
@@ -30,6 +32,6 @@ public class RoleInCareer {
     Shop shop;
     // La date de début de poste
     LocalDate since;
-    // La date de fin de poste
+    // La date de fin de poste, null si le poste n'a pas encore pris fin
     LocalDate until;
 }

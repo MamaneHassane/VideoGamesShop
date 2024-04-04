@@ -1,6 +1,5 @@
 package com.videogamesshop.vgs_package.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.videogamesshop.vgs_package.security.entities.UserInfo;
