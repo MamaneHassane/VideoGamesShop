@@ -13,37 +13,33 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
+@PreAuthorize("hasAnyAuthority({'ADMIN,EMPLOYEE,MODERATOR'})")
 public class CustomerController {
     private final CustomerService customerService;
     @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,EMPLOYEE,MODERATOR'})")
     @GetMapping("/findAll")
     public ResponseEntity<List<Customer>> getAllCustomer(){
         List<Customer> customers= customerService.findAllCustomer();
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,EMPLOYEE,MODERATOR'})")
     @GetMapping("/findOne/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Long id){
         Customer customer = customerService.findCustomerById(id);
         return new ResponseEntity<>(customer,HttpStatus.OK);
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,EMPLOYEE,MODERATOR'})")
     @PostMapping("/register")
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
         customerService.addCustomer(customer);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,EMPLOYEE,MODERATOR'})")
     @PutMapping("/updateOne/{id}")
     public ResponseEntity<Customer> updateCustomer(@RequestBody Customer newCustomer,@PathVariable("id") Long id) {
         Customer customer = customerService.updateCustomerById(newCustomer,id);
         return new ResponseEntity<>(customer,HttpStatus.ACCEPTED);
     }
-    @PreAuthorize("hasAnyAuthority({'ADMIN,EMPLOYEE,MODERATOR'})")
     @DeleteMapping("/deleteOne/{id}")
     public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") Long id) {
         customerService.deleteCustomerById(id);

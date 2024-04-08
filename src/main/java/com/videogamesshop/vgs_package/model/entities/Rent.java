@@ -34,6 +34,7 @@ public class Rent {
     Employee employee;
     // Un prêt est effectuée dans un shop
     @ManyToOne
+    @JsonBackReference("shop_rent")
     Shop shop;
     // Un rent possède un statut : En cours ou remis
     RentStatus status;

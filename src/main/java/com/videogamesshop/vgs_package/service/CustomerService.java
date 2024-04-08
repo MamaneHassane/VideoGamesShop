@@ -15,7 +15,7 @@ import java.util.Optional;
 @Transactional
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    private PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
     @Autowired
     public CustomerService(CustomerRepository customerRepository, PasswordEncoder encoder) {
         this.customerRepository = customerRepository;

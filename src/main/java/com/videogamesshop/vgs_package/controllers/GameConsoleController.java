@@ -4,12 +4,14 @@ import com.videogamesshop.vgs_package.model.entities.GameConsole;
 import com.videogamesshop.vgs_package.service.GameConsoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/gameconsoles")
+@PreAuthorize("hasAnyAuthority({'MODERATOR'})")
 public class GameConsoleController {
     private final GameConsoleService gameConsoleService;
     public GameConsoleController(GameConsoleService gameConsoleService){ this.gameConsoleService = gameConsoleService; }

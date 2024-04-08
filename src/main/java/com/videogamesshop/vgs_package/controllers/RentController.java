@@ -12,27 +12,43 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rents")
+@PreAuthorize("hasAnyAuthority({'EMPLOYEE,ADMIN,MODERATOR'})")
 public class RentController {
     private final RentService rentService;
     @Autowired
     public RentController(RentService rentService) {
         this.rentService = rentService;
     }
-    @PreAuthorize("hasAnyAuthority({'EMPLOYEE,ADMIN,MODERATOR'})")
+
     @GetMapping("/test")
     public String rentsControllerWork(){
         return "Rents controller works fine";
     }
-    @PreAuthorize("hasAnyAuthority({'EMPLOYEE,ADMIN,MODERATOR'})")
+
     @PostMapping("/makerent")
-    public ResponseEntity<Rent> makeRent(@RequestBody CreateRentRecord createRentRecord){
-        return new ResponseEntity<Rent>(rentService.createRent(createRentRecord), HttpStatus.CREATED);
+    public ResponseEntity<?> makeRent(@RequestBody CreateRentRecord createRentRecord){
+        try {
+            return new ResponseEntity<Rent>(rentService.createRent(createRentRecord), HttpStatus.CREATED);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @PreAuthorize("hasAnyAuthority({'EMPLOYEE,ADMIN,MODERATOR'})")
+
+    @PostMapping("/confirmrent/{rentId}")
+    public ResponseEntity<Rent> confirmRent(@PathVariable("rentId") Long rentId){
+        return new ResponseEntity<Rent>(rentService.confirmRent(rentId), HttpStatus.CREATED);
+    }
+
     @PostMapping("/addgametorent")
     public ResponseEntity<?> addGameToRent(@RequestBody AddGameToRentRecord addGameToRentRecord){
         Rent rentDone = rentService.addGameToRent(addGameToRentRecord);
         if(rentDone != null) return new ResponseEntity<Rent>(rentDone, HttpStatus.CREATED);
         return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.EXPECTATION_FAILED);
+    }
+    @PostMapping("/removegamefromrent/{rentId}/{gameId}")
+    public ResponseEntity<?> deleteGameFromRent(@PathVariable("rentId") long rentId, @PathVariable("gameId") long gameId){
+        rentService.deleteGameFromRent(rentId,gameId);
+        return new ResponseEntity<>("Jeu supprimé du prêt",HttpStatus.OK);
     }
 }

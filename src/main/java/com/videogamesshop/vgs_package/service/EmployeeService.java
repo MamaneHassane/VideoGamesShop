@@ -2,6 +2,7 @@ package com.videogamesshop.vgs_package.service;
 
 import com.videogamesshop.vgs_package.exceptions.EmployeeNotFoundException;
 import com.videogamesshop.vgs_package.model.entities.Employee;
+import com.videogamesshop.vgs_package.model.entities.RoleInCareer;
 import com.videogamesshop.vgs_package.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +33,11 @@ public class EmployeeService {
     public Employee findEmployeeById(Long Id){
         return employeeRepository.findById(Id)
                 .orElseThrow(()->new EmployeeNotFoundException(Id));
+    }
+
+    public List<RoleInCareer> getEmployeeCareer(Long employeeId){
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(()->new EmployeeNotFoundException(employeeId));
+        return employee.getRolesOccupied();
     }
 
     public Employee updateEmployeeById(Employee updatedEmployee, Long Id){
