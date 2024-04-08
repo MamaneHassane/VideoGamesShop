@@ -8,10 +8,12 @@ import com.videogamesshop.vgs_package.model.records.AddGameToRentRecord;
 import com.videogamesshop.vgs_package.model.records.CreateRentRecord;
 import com.videogamesshop.vgs_package.repository.*;
 import lombok.AllArgsConstructor;
+import org.springframework.data.repository.core.support.FragmentNotImplementedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +48,9 @@ public class RentService {
         return rentRepository.save(rent);
     }
 
+    public Rent confirmRent(Long rentId){
+        throw new EmptyStackException();
+    }
     public synchronized Rent addGameToRent(AddGameToRentRecord addGameToRentRecord) {
         Optional<VideoGame> theVideoGame = videoGameRepository.findById(addGameToRentRecord.videoGameId());
         theVideoGame.ifPresent(videoGame -> {

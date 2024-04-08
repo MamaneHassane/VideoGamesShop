@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/shops")
-@PreAuthorize("hasAnyAuthority({'MODERATOR'})")
+// @PreAuthorize("hasAnyAuthority({'MODERATOR'})")
 public class ShopController {
     private final ShopService shopService;
     public ShopController(ShopService shopService) { this.shopService = shopService; }

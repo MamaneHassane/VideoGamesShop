@@ -1,6 +1,8 @@
 package com.videogamesshop.vgs_package.model.entities;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.videogamesshop.vgs_package.model.Enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,8 +25,8 @@ public class RoleInCareer {
     // Le salaire
     double salary;
     // L'employé concerné
-    @ManyToOne
-    @JsonBackReference("role_employee")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonManagedReference("role_employee")
     Employee employee;
     // Le shop
     @ManyToOne

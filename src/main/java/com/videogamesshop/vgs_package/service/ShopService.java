@@ -36,6 +36,7 @@ public class ShopService {
         this.roleInCareerRepository = roleInCareerRepository;
     }
     public void addShop(@NotNull Shop shop){
+        shop.setRentsOfShop(new ArrayList<>());
         shopRepository.save(shop);
     }
     public List<Shop> findAllShops(){
@@ -79,7 +80,7 @@ public class ShopService {
                 .orElseThrow(()->new ShopNotFoundException(mutateEmployeeRecord.startShopId()));
 
         // Retrouver l'ancien pas de carrière
-        RoleInCareer oldRoleInCareer = employee.getRolesOccupied().get(employee.getRolesOccupied().size());
+        RoleInCareer oldRoleInCareer = employee.getRolesOccupied().get(employee.getRolesOccupied().size()-1);
         // Modifier la date d'arrêt de travail
         oldRoleInCareer.setUntil(LocalDate.now()); // Arrête le travail aujourd'hui, le jour de la mutation
         // Le mettre à jour dans la base de données
@@ -87,6 +88,7 @@ public class ShopService {
 
         // Créer le nouveau pas de carrière avec toutes les informations nécéssaires
         RoleInCareer newRoleInCareer = RoleInCareer.builder()
+                .employee(employee)
                 .salary(oldRoleInCareer.getSalary())
                 .shop(destinationShop) // La boutique de destination
                 .since(mutateEmployeeRecord.since()) // La date de départ depuis le corps de la reqûete
@@ -96,7 +98,9 @@ public class ShopService {
         // Le sauvegarder dans la base de données
         roleInCareerRepository.save(newRoleInCareer);
         // L'ajouter à l'employé
-        employee.getRolesOccupied().add(newRoleInCareer);
+        List<RoleInCareer> allRolesInCareer = employee.getRolesOccupied();
+        allRolesInCareer.add(newRoleInCareer);
+        employee.setRolesOccupied(allRolesInCareer);
         // Mettre à jour la base de données
         employeeRepository.save(employee);
         // Retourner un message
@@ -106,11 +110,13 @@ public class ShopService {
     public Employee addEmployeeToShop(@NotNull AddEmployeeToShopRecord addEmployeeToShopRecord){
         // L'employé
         Employee employee = addEmployeeToShopRecord.employee();
+        employeeRepository.save(employee);
         // Retrouver la boutique en question
         Shop startShop = shopRepository.findById(addEmployeeToShopRecord.shopId())
                 .orElseThrow(()->new ShopNotFoundException(addEmployeeToShopRecord.shopId()));
         // Créer le nouveau pas de carrière avec toutes les informations nécéssaires
         RoleInCareer newRoleInCareer = RoleInCareer.builder()
+                .employee(employee)
                 .salary(addEmployeeToShopRecord.salary())
                 .shop(startShop) // La boutique de destination
                 .since(addEmployeeToShopRecord.startDate()) // La date de départ depuis le corps de la reqûete
@@ -119,13 +125,16 @@ public class ShopService {
                 .build();
         // Le sauvegarder dans la base de données
         roleInCareerRepository.save(newRoleInCareer);
+        // Les roles occupés par l'employé
+        List<RoleInCareer> rolesInCareer = new ArrayList<>();
+        rolesInCareer.add(newRoleInCareer);
         // L'ajouter à l'employé
-        employee.getRolesOccupied().add(newRoleInCareer);
+        employee.setRolesOccupied(rolesInCareer);
         // Mettre à jour la base de données
         employeeRepository.save(employee);
         return employee;
     }
-    public Employee removeEmployeeFromShop(Long shopId, Long employeeId){
+    public Employee removeEmployeeFromShop(Long employeeId, Long shopId){
         // L'employé en question
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(()->new EmployeeNotFoundException(employeeId));
@@ -133,7 +142,7 @@ public class ShopService {
         Shop shop = shopRepository.findById(shopId)
                 .orElseThrow(()->new ShopNotFoundException(shopId));
         // Retrouver l'ancien pas de carrière
-        RoleInCareer oldRoleInCareer = employee.getRolesOccupied().get(employee.getRolesOccupied().size());
+        RoleInCareer oldRoleInCareer = employee.getRolesOccupied().get(employee.getRolesOccupied().size()-1);
         // Modifier la date d'arrêt de travail
         oldRoleInCareer.setUntil(LocalDate.now()); // Arrête le travail aujourd'hui, le jour de la mutation
         // Le mettre à jour dans la base de données
