@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,8 +17,9 @@ public class GameConsoleController {
     private final GameConsoleService gameConsoleService;
     public GameConsoleController(GameConsoleService gameConsoleService){ this.gameConsoleService = gameConsoleService; }
     @PostMapping("/createOne")
-    public ResponseEntity<GameConsole> createGameConsole(@RequestBody GameConsole gameConsole){
-        gameConsoleService.addGameConsole(gameConsole);
+    public ResponseEntity<GameConsole> createGameConsole(@RequestPart("gameConsole") String gameConsoleString,
+                                                         @RequestPart("gameConsoleImage")MultipartFile gameConsoleImage) throws Exception{
+        gameConsoleService.addGameConsole(gameConsoleString,gameConsoleImage);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @GetMapping("/findAll")

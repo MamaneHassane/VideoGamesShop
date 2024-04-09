@@ -12,7 +12,9 @@ import org.springframework.data.repository.core.support.FragmentNotImplementedEx
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Optional;
@@ -43,14 +45,11 @@ public class RentService {
         theEmployee.ifPresent(rent::setEmployee);
         rent.setEndDate(LocalDate.now().plusDays(createRentRecord.numberOfDays()));
         rent.setStartDate(LocalDate.now());
-        rent.setStatus(RentStatus.ONGOING);
+        rent.setStatus(RentStatus.CREATED);
         rent.setCost(createRentRecord.numberOfDays()*((double) 1 /7) * 0); // 1 Dollar par semaine par jeu, quel que soit le jeu, 0 jeu au début
         return rentRepository.save(rent);
     }
 
-    public Rent confirmRent(Long rentId){
-        throw new EmptyStackException();
-    }
     public synchronized Rent addGameToRent(AddGameToRentRecord addGameToRentRecord) {
         Optional<VideoGame> theVideoGame = videoGameRepository.findById(addGameToRentRecord.videoGameId());
         theVideoGame.ifPresent(videoGame -> {
@@ -84,6 +83,21 @@ public class RentService {
             });
         });
     }
+
+    public Rent confirmRent(Long rentId){
+        Rent theRent = rentRepository.findById(rentId).orElseThrow(()->new RentNotFoundException(rentId));
+        for(VideoGameCopy videoGameCopy : theRent.getVideoGameCopies()){
+            videoGameCopy.setStatus(VideoGameCopyStatus.RENTED);
+        }
+        Duration theRentDuration = Duration.between(theRent.getReturnDate().atStartOfDay(), theRent.getStartDate().atStartOfDay());
+        int theRentDurationInDays = (int) theRentDuration.toDays();
+        double theRentCost = theRent.getVideoGameCopies().size() * (double)(1/7) * theRentDurationInDays;
+        theRent.setCost(theRentCost);
+        theRent.setStatus(RentStatus.ONGOING);
+        rentRepository.save(theRent);
+        return theRent;
+    }
+
     public Optional<Rent> returnRent(Long rentId){
         return rentRepository.findById(rentId).map((rent)->{
             for(VideoGameCopy videoGameCopy : rent.getVideoGameCopies()){

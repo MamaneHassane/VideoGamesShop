@@ -34,6 +34,7 @@ public class VideoGameCopyService {
                 }
         ).orElseThrow(()->new VideoGameCopyNotFoundException(Id));
     }
+    // Will allow to delete copy of a game
     public void deleteVideoGameCopyById(Long Id){
         videoGameCopyRepository.deleteById(Id);
     }

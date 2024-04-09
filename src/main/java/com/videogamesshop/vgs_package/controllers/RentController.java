@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/rents")
 @PreAuthorize("hasAnyAuthority({'EMPLOYEE,ADMIN,MODERATOR'})")
@@ -25,8 +27,8 @@ public class RentController {
         return "Rents controller works fine";
     }
 
-    @PostMapping("/makerent")
-    public ResponseEntity<?> makeRent(@RequestBody CreateRentRecord createRentRecord){
+    @PostMapping("/createrent")
+    public ResponseEntity<?> createRent(@RequestBody CreateRentRecord createRentRecord){
         try {
             return new ResponseEntity<Rent>(rentService.createRent(createRentRecord), HttpStatus.CREATED);
         } catch (Exception exception) {
@@ -34,21 +36,55 @@ public class RentController {
             return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @PostMapping("/confirmrent/{rentId}")
-    public ResponseEntity<Rent> confirmRent(@PathVariable("rentId") Long rentId){
-        return new ResponseEntity<Rent>(rentService.confirmRent(rentId), HttpStatus.CREATED);
-    }
-
     @PostMapping("/addgametorent")
     public ResponseEntity<?> addGameToRent(@RequestBody AddGameToRentRecord addGameToRentRecord){
-        Rent rentDone = rentService.addGameToRent(addGameToRentRecord);
-        if(rentDone != null) return new ResponseEntity<Rent>(rentDone, HttpStatus.CREATED);
-        return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.EXPECTATION_FAILED);
+        try {
+            Rent rentDone = rentService.addGameToRent(addGameToRentRecord);
+            if(rentDone != null) return new ResponseEntity<Rent>(rentDone, HttpStatus.CREATED);
+            return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.EXPECTATION_FAILED);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @PostMapping("/removegamefromrent/{rentId}/{gameId}")
     public ResponseEntity<?> deleteGameFromRent(@PathVariable("rentId") long rentId, @PathVariable("gameId") long gameId){
-        rentService.deleteGameFromRent(rentId,gameId);
-        return new ResponseEntity<>("Jeu supprimé du prêt",HttpStatus.OK);
+        try {
+            rentService.deleteGameFromRent(rentId,gameId);
+            return new ResponseEntity<>("Jeu supprimé du prêt",HttpStatus.OK);
+        } catch(Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+    @PostMapping("/confirmrent/{rentId}")
+    public ResponseEntity<?> confirmRent(@PathVariable("rentId") Long rentId){
+        try {
+            return new ResponseEntity<>(rentService.confirmRent(rentId), HttpStatus.CREATED);
+        } catch(Exception exception){
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/returnrent/{rentId}")
+    public ResponseEntity<?> returnRent(@PathVariable("rentId") Long rentId){
+        try {
+            return new ResponseEntity<>(rentService.returnRent(rentId), HttpStatus.CREATED);
+        } catch(Exception exception){
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/findrentsofcustomer/{customerId}")
+    public ResponseEntity<?> findCustomerRents(@PathVariable("customerId") Long customerId){
+        try {
+            return new ResponseEntity<>(rentService.findRentsByCustomerId(customerId), HttpStatus.OK);
+        } catch(Exception exception){
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

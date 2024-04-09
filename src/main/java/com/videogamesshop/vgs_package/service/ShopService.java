@@ -11,7 +11,6 @@ import com.videogamesshop.vgs_package.model.records.MutateEmployeeRecord;
 import com.videogamesshop.vgs_package.repository.EmployeeRepository;
 import com.videogamesshop.vgs_package.repository.RoleInCareerRepository;
 import com.videogamesshop.vgs_package.repository.ShopRepository;
-import com.videogamesshop.vgs_package.security.entities.UserInfo;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.videogamesshop.vgs_package.service.helpers.ShopServiceHelper.getMutationMessage;
+import static com.videogamesshop.vgs_package.service.helpers.ShopServiceHelpers.getMutationMessage;
 
 @Service
 @Transactional

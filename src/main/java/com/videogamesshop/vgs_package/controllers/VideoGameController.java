@@ -20,35 +20,66 @@ public class VideoGameController {
         this.videoGameService = videoGameService;
     }
     @GetMapping("/findAll")
-    public ResponseEntity<List<VideoGame>> getAllVideoGames(){
+    public ResponseEntity<?> getAllVideoGames(){
+        try {
+
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         List<VideoGame> videoGames= videoGameService.findAllVideoGame();
         return new ResponseEntity<>(videoGames, HttpStatus.OK);
     }
     @PostMapping("/addCopy/{videoGameId}")
     public ResponseEntity<?> addNewCopyToGame(@PathVariable("videoGameId") Long videoGameId){
-        if(videoGameService.addNewCopyToGame(videoGameId).get())
-            return new ResponseEntity<>("Copie ajouté avec succès",HttpStatus.ACCEPTED);
-        return new ResponseEntity<>("Erreur lors de l'ajout de la copie",HttpStatus.EXPECTATION_FAILED);
+        try {
+            if(videoGameService.addNewCopyToGame(videoGameId).get())
+                return new ResponseEntity<>("Copie ajouté avec succès",HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("Erreur lors de l'ajout de la copie",HttpStatus.EXPECTATION_FAILED);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @GetMapping("/findOne/{id}")
-    public ResponseEntity<VideoGame> getVideoGameById(@PathVariable Long id){
-        VideoGame videoGame = videoGameService.findVideoGameById(id);
-        return new ResponseEntity<>(videoGame,HttpStatus.OK);
+    public ResponseEntity<?> getVideoGameById(@PathVariable Long id){
+        try {
+            VideoGame videoGame = videoGameService.findVideoGameById(id);
+            return new ResponseEntity<>(videoGame,HttpStatus.OK);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @PostMapping("/createOne")
-    public ResponseEntity<VideoGame> createVideoGame(@RequestPart("videogame") String createVideoGameString,
-                                                     @RequestPart("videogameimage")MultipartFile videoGameImage) throws Exception {
-        VideoGame videoGame = videoGameService.addVideoGame(createVideoGameString,videoGameImage);
-        return new ResponseEntity<>(videoGame,HttpStatus.CREATED);
+    public ResponseEntity<?> createVideoGame(@RequestPart("videogame") String createVideoGameString,
+                                             @RequestPart("videogameimage")MultipartFile videoGameImage) throws Exception {
+        try {
+            VideoGame videoGame = videoGameService.addVideoGame(createVideoGameString,videoGameImage);
+            return new ResponseEntity<>(videoGame,HttpStatus.CREATED);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @PutMapping("/updateOne/{id}")
-    public ResponseEntity<VideoGame> updateVideoGameById(@RequestBody UpdateVideoGameRecord updatedVideoGameRecord, @PathVariable("id") Long id){
-        VideoGame videoGame = videoGameService.updateVideoGameById(updatedVideoGameRecord,id);
-        return new ResponseEntity<>(videoGame,HttpStatus.ACCEPTED);
+    public ResponseEntity<?> updateVideoGameById(@RequestBody UpdateVideoGameRecord updatedVideoGameRecord, @PathVariable("id") Long id){
+        try {
+            VideoGame videoGame = videoGameService.updateVideoGameById(updatedVideoGameRecord,id);
+            return new ResponseEntity<>(videoGame,HttpStatus.ACCEPTED);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @DeleteMapping("/deleteOne/{id}")
-    public ResponseEntity<VideoGame> deleteVideoGameById(@PathVariable("id") Long id){
-        videoGameService.deleteVideoGameById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> deleteVideoGameById(@PathVariable("id") Long id){
+        try {
+            videoGameService.deleteVideoGameById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ResponseEntity<>("Une erreur s'est produite ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
